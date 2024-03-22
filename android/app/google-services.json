@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592388319148",
+    "project_id": "taverna-dos-combos",
+    "storage_bucket": "taverna-dos-combos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592388319148:android:c5b17943e32bd753a77c09",
+        "android_client_info": {
+          "package_name": "com.example.tavernadoscombos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD32Z4CtvqQgPNHUiqWMmK7zNEte5AaOtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
