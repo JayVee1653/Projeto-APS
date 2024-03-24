@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tavernadoscombos/paginas/lista.dart';
 
 class CriarContaPage extends StatelessWidget {
 
@@ -55,7 +56,10 @@ class CriarContaPage extends StatelessWidget {
                       email: email, 
                       password: senha,
                     );
-                    print(user);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ListaPage(),
+                      )
+                    );
                   },
                   child: Text("Criar Conta"),
                 ),
