@@ -16,39 +16,51 @@ class CriarContaPage extends StatelessWidget {
         title: Text('Criar Conta'),
       ),
       
-      body: Center(
-        child: Column(
-            children: [
-              Text("Bem-vindo a Taverna dos Combos!"), 
-              TextField(
-                controller: criarEmailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "seuemail@gmail.com",
-                  label: Text("Insira o seu e-mail"),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+              children: [
+                Text("Bem-vindo a Taverna dos Combos!"),
+                SizedBox(
+                    height: 16,
+                    ), 
+                TextField(
+                  controller: criarEmailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "seuemail@gmail.com",
+                    label: Text("Insira o seu e-mail"),
+                  ),
                 ),
-              ),
-              TextField(
-                obscureText: true,
-                controller: criarSenhaController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Insira uma senha"), 
+                SizedBox(
+                    height: 16,
+                    ),
+                TextField(
+                  obscureText: true,
+                  controller: criarSenhaController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Insira uma senha"), 
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  String email = criarEmailController.text;
-                  String senha = criarSenhaController.text;
-                  var user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: email, 
-                    password: senha,
-                  );
-                  print(user);
-                },
-                child: Text("Criar Conta"),
-              ),
-            ]
+                SizedBox(
+                    height: 16,
+                    ),
+                TextButton(
+                  onPressed: () async {
+                    String email = criarEmailController.text;
+                    String senha = criarSenhaController.text;
+                    var user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email, 
+                      password: senha,
+                    );
+                    print(user);
+                  },
+                  child: Text("Criar Conta"),
+                ),
+              ]
+          ),
         ),
       ),
     );

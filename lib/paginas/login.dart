@@ -15,60 +15,70 @@ class LoginPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Login'),
       ),
-      body: Center(
-        child: Column(
-            children: [
-              Text("Bem-vindo a Taverna dos Combos!"), 
-              TextField(
-                controller: loginEmailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "seuemail@gmail.com",
-                  label: Text("E-mail"),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+              children: [
+                Text("Bem-vindo a Taverna dos Combos!"), 
+                SizedBox(
+                  height: 16,
+                  ),
+                TextField(
+                  controller: loginEmailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "seuemail@gmail.com",
+                    label: Text("E-mail"),
+                  ),
                 ),
-              ),
-              TextField(
-                obscureText: true,
-                controller: loginSenhaController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text("Senha"), 
+                SizedBox(
+                  height: 16,
+                  ),
+                TextField(
+                  obscureText: true,
+                  controller: loginSenhaController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Senha"), 
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ListaPage(),
-                    ),
-                  );
-                  return;
-                  
-                  String email = loginEmailController.text;
-                  String senha = loginSenhaController.text;
-                  var user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: email, 
-                    password: senha,
-                  );
-                  if(user != null){
+                SizedBox(
+                  height: 16,
+                  ),
+                TextButton(
+                  onPressed: () async {
+                    
+                    String email = loginEmailController.text;
+                    String senha = loginSenhaController.text;
+                    var user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email, 
+                      password: senha,
+                    );
+                    if(user != null){
+                      Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ListaPage(),
+                      ),
+                    );
+                    }
+                    print(user);
+                  },
+                child: Text("Login"),
+                ),
+                SizedBox(
+                  height: 16,
+                  ),
+                TextButton(
+                  onPressed: () {
                     Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ListaPage(),
-                    ),
-                  );
-                  }
-                  print(user);
-                },
-              child: Text("Login"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => CriarContaPage(),
-                    ),
-                  );
-                }, 
-                child: Text("Criar uma conta"),
-                ),
-            ]
+                      MaterialPageRoute(builder: (context) => CriarContaPage(),
+                      ),
+                    );
+                  }, 
+                  child: Text("Criar uma conta"),
+                  ),
+              ]
+          ),
         ),
       ),
     );
