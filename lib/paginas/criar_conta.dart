@@ -2,10 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/paginas/lista.dart';
 
+/// Classe que engloba toda a página de Criar Conta
 class CriarContaPage extends StatelessWidget {
 
-  TextEditingController criarEmailController = TextEditingController();
-  TextEditingController criarSenhaController = TextEditingController();
+  /// Controlador responsável pelo e-mail
+  final TextEditingController criarEmailController = TextEditingController();
+  /// Controlador responsável pela senha
+  final TextEditingController criarSenhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -14,56 +17,58 @@ class CriarContaPage extends StatelessWidget {
       
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Criar Conta'),
+        title: const Text('Criar Conta'),
       ),
       
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-              children: [
-                Text("Bem-vindo a Taverna dos Combos!"),
-                SizedBox(
+              children: <Widget>[
+                const Text('Bem-vindo a Taverna dos Combos!'),
+                const SizedBox(
                     height: 16,
                     ), 
                 TextField(
                   controller: criarEmailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: "seuemail@gmail.com",
-                    label: Text("Insira o seu e-mail"),
+                    hintText: 'seuemail@gmail.com',
+                    label: Text('Insira o seu e-mail'),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                     height: 16,
                     ),
                 TextField(
                   obscureText: true,
                   controller: criarSenhaController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    label: Text("Insira uma senha"), 
+                    label: Text('Insira uma senha'), 
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                     height: 16,
                     ),
                 TextButton(
                   onPressed: () async {
-                    String email = criarEmailController.text;
-                    String senha = criarSenhaController.text;
-                    var user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    final String email = criarEmailController.text;
+                    final String senha = criarSenhaController.text;
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email, 
                       password: senha,
                     );
+                    // ignore: use_build_context_synchronously
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ListaPage(),
-                      )
+                      MaterialPageRoute<void>(builder: 
+                      (BuildContext context) => ListaPage(),
+                      ),
                     );
                   },
-                  child: Text("Criar Conta"),
+                  child: const Text('Criar Conta'),
                 ),
-              ]
+              ],
           ),
         ),
       ),

@@ -3,81 +3,83 @@ import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/paginas/criar_conta.dart';
 import 'package:tavernadoscombos/paginas/lista.dart';
 
+/// Classe que engloba toda a página de Login
 class LoginPage extends StatelessWidget {
 
-  TextEditingController loginEmailController = TextEditingController();
-  TextEditingController loginSenhaController = TextEditingController();
+  /// Controlador responsável pelo e-mail
+  final TextEditingController loginEmailController = TextEditingController();
+  /// Controlador responsável pela senha
+  final TextEditingController loginSenhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-              children: [
-                Text("Bem-vindo a Taverna dos Combos!"), 
-                SizedBox(
+              children: <Widget>[
+                const Text('Bem-vindo a Taverna dos Combos!'), 
+                const SizedBox(
                   height: 16,
                   ),
                 TextField(
                   controller: loginEmailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: "seuemail@gmail.com",
-                    label: Text("E-mail"),
+                    hintText: 'seuemail@gmail.com',
+                    label: Text('E-mail'),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                   ),
                 TextField(
                   obscureText: true,
                   controller: loginSenhaController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    label: Text("Senha"), 
+                    label: Text('Senha'), 
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                   ),
                 TextButton(
                   onPressed: () async {
                     
-                    String email = loginEmailController.text;
-                    String senha = loginSenhaController.text;
-                    var user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    final String email = loginEmailController.text;
+                    final String senha = loginSenhaController.text;
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: email, 
                       password: senha,
                     );
-                    if(user != null){
-                      Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ListaPage(),
-                      ),
-                    );
-                    }
-                    print(user);
+                    Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: 
+                    (BuildContext context) => ListaPage(),
+                    ),
+                  );
                   },
-                child: Text("Login"),
+                child: const Text('Login'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                   ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CriarContaPage(),
+                      MaterialPageRoute<void>(builder: 
+                      (BuildContext context) => CriarContaPage(),
                       ),
                     );
                   }, 
-                  child: Text("Criar uma conta"),
+                  child: const Text('Criar uma conta'),
                   ),
-              ]
+              ],
           ),
         ),
       ),

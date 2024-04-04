@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tavernadoscombos/ficha.dart';
 import 'package:tavernadoscombos/paginas/editar_ficha.dart';
 
+/// Classe responsável pela página da Lista
 class ListaPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,46 +15,47 @@ class ListaPage extends StatefulWidget {
 
 
 class _ListaState extends State<ListaPage> {
-  late FirebaseFirestore? db;
   
   _ListaState() {
     db = FirebaseFirestore.instanceFor(app: Firebase.apps.first);
   }
+  late FirebaseFirestore? db;
 
-  List<Ficha> fichas = [];
+  List<Ficha> fichas = List<Ficha>.empty();
 
-  Widget apagar(Author_uid, uid) {
-    if (FirebaseAuth.instance.currentUser != null && Author_uid == FirebaseAuth.instance.currentUser!.uid) {
+  Widget apagar(String authorUID, String uid) {
+    if (FirebaseAuth.instance.currentUser != null && 
+    authorUID == FirebaseAuth.instance.currentUser!.uid) {
       return IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () {
-          db!.collection("fichas").doc(uid).delete();
+          db!.collection('fichas').doc(uid).delete();
           setState(() {
-            fichas.removeWhere((element) => element.Uid == uid);
+            fichas.removeWhere((Ficha element) => element.uID == uid);
           });
         },
       );
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
     Widget editar(Ficha ficha) {
     if (FirebaseAuth.instance.currentUser != null && 
-        ficha.Author_uid == FirebaseAuth.instance.currentUser!.uid) {
+        ficha.authorUID == FirebaseAuth.instance.currentUser!.uid) {
       return IconButton(
-        icon: Icon(Icons.edit),
+        icon: const Icon(Icons.edit),
         onPressed: () async {
           await Navigator.push(
             context, 
-            MaterialPageRoute(
-              builder: (context) => EditarFichaPage(
-                ficha: ficha
-                )));
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) => EditarFichaPage(
+                ficha: ficha,
+                ),),);
         carregarFichas();
-        }
+        },
       );
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   Widget construirLista(BuildContext context, int index) {
@@ -63,43 +63,47 @@ class _ListaState extends State<ListaPage> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          children: [
+          children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Nome: ${fichas[index].Nome}',
+              children: <Widget>[
+                Text('Nome: ${fichas[index].nome}',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary)),
-                Text('Classe: ${fichas[index].Classe}'),
-                Text('Origem: ${fichas[index].Origem}'),
-                Text('Magias: ${fichas[index].Magias.join(", ")}'),
-                Text('Poderes Gerais: ${fichas[index].Poderes_gerais.join(", ")}'),
+                        color: Theme.of(context).colorScheme.primary,),),
+                Text('Classe: ${fichas[index].classe}'),
+                Text('Origem: ${fichas[index].origem}'),
+                Text('Magias: ${fichas[index].magias.join(", ")}'),
+                Text('Poderes Gerais: ${fichas[index].poderesGerais.join
+                (", ")}'),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             editar(fichas[index]),
-            apagar(fichas[index].Author_uid, fichas[index].Uid),
+            apagar(fichas[index].authorUID, fichas[index].uID),
           ],
         ),
       ),
     );
   }
 
-  void carregarFichas() async {
-    final response = await db!.collection("fichas").get();
+  Future<void> carregarFichas() async {
+    final QuerySnapshot<Map<String, dynamic>> 
+    response = await db!.collection('fichas').get();
     setState(() {
       fichas.clear();
-      for (var element in response.docs) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> element 
+      in response.docs) {
         fichas.add(Ficha(
-            Uid: element.id,
-            Author_uid: element["Author_uid"],
-            Classe: element["Classe"],
-            Magias: List<String>.from(element["Magias"]),
-            Nome: element["Nome"],
-            Origem: element["Origem"],
-            Poderes_gerais: List<String>.from(element["Poderes_gerais"])));
+            uID: element.id,
+            authorUID: element['Author_uid'] as String,
+            classe: element['Classe'] as String,
+            magias: List<String>.from(element['Magias'] as List<String>),
+            nome: element['Nome'] as String,
+            origem: element['Origem'] as String,
+            poderesGerais: List<String>.from(element['Poderes_gerais'] 
+            as List<String>,),),);
       }
     });
   }
@@ -108,8 +112,8 @@ class _ListaState extends State<ListaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
-          TextButton(onPressed: carregarFichas, child: Text("Carregar")),
+        children: <Widget>[
+          TextButton(onPressed: carregarFichas, child: const Text('Carregar')),
           Expanded(
             child: ListView.builder(
               itemCount: fichas.length, 
@@ -120,13 +124,14 @@ class _ListaState extends State<ListaPage> {
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Lista de Fichas"),
+        title: const Text('Lista de Fichas'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => EditarFichaPage()));
+          Navigator.push(context, MaterialPageRoute<void>(builder: 
+          (BuildContext context) => const EditarFichaPage(),),);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         ),
   );
   

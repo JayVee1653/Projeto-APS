@@ -4,33 +4,37 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/ficha.dart';
 
+/// Classe responsável por toda a página de Editar Ficha
 class EditarFichaPage extends StatefulWidget {
+  /// Constructo responsável por toda a página de Editar Ficha
+  const EditarFichaPage({super.key, this.ficha});
+  /// Chamada responsável por adquirir todo as informações da ficha
   final Ficha? ficha;
-  EditarFichaPage({Key? key, this.ficha}) : super(key: key);
 
   @override
   _EditarFichaPageState createState() => _EditarFichaPageState();
 }
 
 class _EditarFichaPageState extends State<EditarFichaPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nomeController = TextEditingController();
-  final _classeController = TextEditingController();
-  final _origemController = TextEditingController();
-  final _poderesgeraisController = TextEditingController();
-  final _magiasController = TextEditingController();
-  List<String> _poderesgerais = [];
-  List<String> _magias = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _classeController = TextEditingController();
+  final TextEditingController _origemController = TextEditingController();
+  final TextEditingController 
+  _poderesgeraisController = TextEditingController();
+  final TextEditingController _magiasController = TextEditingController();
+  List<String> _poderesgerais = <String>[];
+  List<String> _magias = <String>[];
 
   @override
   void initState() {
     super.initState();
     if (widget.ficha != null) {
-      _nomeController.text = widget.ficha!.Nome;
-      _classeController.text = widget.ficha!.Classe;
-      _origemController.text = widget.ficha!.Origem;
-      _poderesgerais = widget.ficha!.Poderes_gerais;
-      _magias = widget.ficha!.Magias;
+      _nomeController.text = widget.ficha!.nome;
+      _classeController.text = widget.ficha!.classe;
+      _origemController.text = widget.ficha!.origem;
+      _poderesgerais = widget.ficha!.poderesGerais;
+      _magias = widget.ficha!.magias;
     }
   }
 
@@ -72,18 +76,18 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Ficha'),
+        title: const Text('Editar Ficha'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
-            children: [
+            children: <Widget>[
               TextFormField(
                 controller: _nomeController,
-                decoration: InputDecoration(labelText: 'Nome'),
-                validator: (value) {
+                decoration: const InputDecoration(labelText: 'Nome'),
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, coloque um nome';
                   }
@@ -92,8 +96,8 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
               ),
               TextFormField(
                 controller: _classeController,
-                decoration: InputDecoration(labelText: 'Classe'),
-                validator: (value) {
+                decoration: const InputDecoration(labelText: 'Classe'),
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, coloque uma classe';
                   }
@@ -102,24 +106,24 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
               ),
               TextFormField(
                 controller: _origemController,
-                decoration: InputDecoration(labelText: 'Origem'),
-                validator: (value) {
+                decoration: const InputDecoration(labelText: 'Origem'),
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, coloque uma origem';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
-              Text('Poderes Gerais', style: TextStyle(fontSize: 16.0)),
+              const SizedBox(height: 16.0),
+              const Text('Poderes Gerais', style: TextStyle(fontSize: 16.0)),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: _poderesgerais.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(_poderesgerais[index]),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () => _removerPoderes(index),
                     ),
                   );
@@ -127,21 +131,22 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
               ),
               TextFormField(
                 controller: _poderesgeraisController,
-                decoration: InputDecoration(labelText: 'Adicionar Poder Geral'),
+                decoration: const InputDecoration
+                (labelText: 'Adicionar Poder Geral'),
               ),
               TextButton(
-                child: Text('Adicionar'),
                 onPressed: _adicionarPoderes,
+                child: const Text('Adicionar'),
               ),
-              Text('Magia', style: TextStyle(fontSize: 16.0)),
+              const Text('Magia', style: TextStyle(fontSize: 16.0)),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: _magias.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(_magias[index]),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () => _removerMagias(index),
                     ),
                   );
@@ -149,34 +154,34 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
               ),
               TextFormField(
                 controller: _magiasController,
-                decoration: InputDecoration(labelText: 'Adicionar Magia'),
+                decoration: const InputDecoration(labelText: 'Adicionar Magia'),
               ),
               TextButton(
-                child: Text('Adicionar'),
                 onPressed: _adicionarMagias,
+                child: const Text('Adicionar'),
               ),
               TextButton(
-                child: Text('Salvar'),
+                child: const Text('Salvar'),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    if (FirebaseAuth.instance.currentUser!.uid != null) {
-                      final ficha = Ficha(
-                        Author_uid: FirebaseAuth.instance.currentUser!.uid,
-                        Classe: _classeController.text,
-                        Nome: _nomeController.text,
-                        Origem: _origemController.text,
-                        Poderes_gerais: _poderesgerais,
-                        Magias: _magias,
+                    if (FirebaseAuth.instance.currentUser?.uid != null) {
+                      final Ficha ficha = Ficha(
+                        authorUID: FirebaseAuth.instance.currentUser!.uid,
+                        classe: _classeController.text,
+                        nome: _nomeController.text,
+                        origem: _origemController.text,
+                        poderesGerais: _poderesgerais,
+                        magias: _magias,
                       );
-                      if(widget.ficha != null && widget.ficha!.Uid.isNotEmpty) {
+                      if(widget.ficha != null && widget.ficha!.uID.isNotEmpty) {
                        await FirebaseFirestore.instanceFor(
-                              app: Firebase.apps.first)
+                              app: Firebase.apps.first,)
                           .collection('fichas')
-                          .doc(widget.ficha!.Uid)
+                          .doc(widget.ficha!.uID)
                           .update(ficha.toMap()); 
                       } else {
                         await FirebaseFirestore.instanceFor(
-                              app: Firebase.apps.first)
+                              app: Firebase.apps.first,)
                           .collection('fichas')
                           .add(ficha.toMap());
                       }

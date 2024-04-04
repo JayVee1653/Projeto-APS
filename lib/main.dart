@@ -8,13 +8,16 @@ void main() {
   runApp(const MyApp());
 }
 
-void init() async {
+/// Função responsável por iniciar o Firebase
+Future<void> init() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }
 
+/// Classe responsável por conter todo o app
 class MyApp extends StatelessWidget {
+  ///Construtor responsável pelo app
   const MyApp({super.key});
 
   @override
