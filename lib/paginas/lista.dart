@@ -88,7 +88,7 @@ class _ListaState extends State<ListaPage> {
     );
   }
 
-  Future<void> carregarFichas() async {
+    Future<void> carregarFichas() async {
     final QuerySnapshot<Map<String, dynamic>> 
     response = await db!.collection('fichas').get();
     setState(() {
