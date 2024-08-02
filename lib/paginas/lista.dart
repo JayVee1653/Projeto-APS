@@ -21,7 +21,7 @@ class _ListaState extends State<ListaPage> {
   }
   late FirebaseFirestore? db;
 
-  List<Ficha> fichas = List<Ficha>.empty();
+  List<Ficha> fichas = <Ficha>[];
 
   Widget apagar(String authorUID, String uid) {
     if (FirebaseAuth.instance.currentUser != null && 
@@ -47,7 +47,7 @@ class _ListaState extends State<ListaPage> {
         onPressed: () async {
           await Navigator.push(
             context, 
-            MaterialPageRoute<void>(
+             MaterialPageRoute<void>(
               builder: (BuildContext context) => EditarFichaPage(
                 ficha: ficha,
                 ),),);
@@ -99,11 +99,11 @@ class _ListaState extends State<ListaPage> {
             uID: element.id,
             authorUID: element['Author_uid'] as String,
             classe: element['Classe'] as String,
-            magias: List<String>.from(element['Magias'] as List<String>),
+            magias: List<String>.from(element['Magias'] as List<dynamic>),
             nome: element['Nome'] as String,
             origem: element['Origem'] as String,
             poderesGerais: List<String>.from(element['Poderes_gerais'] 
-            as List<String>,),),);
+            as List<dynamic>,),),);
       }
     });
   }

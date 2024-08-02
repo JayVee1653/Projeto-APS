@@ -10,6 +10,7 @@ void main() {
 
 /// Função responsável por iniciar o Firebase
 Future<void> init() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

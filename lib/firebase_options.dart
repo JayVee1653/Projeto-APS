@@ -28,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,7 +41,7 @@ class DefaultFirebaseOptions {
     }
   }
 
-  /// Configurações para web
+  /// /// Configurações para web
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBhfvD3yJhUoCy3p5sdaWpk4lPbneu_uMA',
     appId: '1:592388319148:web:19bea9c95552e034a77c09',
@@ -56,6 +53,7 @@ class DefaultFirebaseOptions {
   );
 
   /// Configurações para android
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD32Z4CtvqQgPNHUiqWMmK7zNEte5AaOtI',
     appId: '1:592388319148:android:c5b17943e32bd753a77c09',
@@ -65,6 +63,7 @@ class DefaultFirebaseOptions {
   );
 
   /// Configurações para iOS
+
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAkE1gchEKCUBaEWcXPrPyFDfR1H4HXScs',
     appId: '1:592388319148:ios:7b7d3e899f80112fa77c09',
@@ -75,12 +74,26 @@ class DefaultFirebaseOptions {
   );
 
   /// Configurações para macOS
+
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAkE1gchEKCUBaEWcXPrPyFDfR1H4HXScs',
-    appId: '1:592388319148:ios:79c228581e662fa0a77c09',
+    appId: '1:592388319148:ios:7b7d3e899f80112fa77c09',
     messagingSenderId: '592388319148',
     projectId: 'taverna-dos-combos',
     storageBucket: 'taverna-dos-combos.appspot.com',
-    iosBundleId: 'com.example.tavernadoscombos.RunnerTests',
+    iosBundleId: 'com.example.tavernadoscombos',
   );
+
+  /// Configurações para windows
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBhfvD3yJhUoCy3p5sdaWpk4lPbneu_uMA',
+    appId: '1:592388319148:web:120220b722edfb34a77c09',
+    messagingSenderId: '592388319148',
+    projectId: 'taverna-dos-combos',
+    authDomain: 'taverna-dos-combos.firebaseapp.com',
+    storageBucket: 'taverna-dos-combos.appspot.com',
+    measurementId: 'G-2EJCJ65TMF',
+  );
+
 }
