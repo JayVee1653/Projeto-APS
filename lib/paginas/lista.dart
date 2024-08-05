@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/ficha.dart';
+import 'package:tavernadoscombos/paginas/dado.dart';
 import 'package:tavernadoscombos/paginas/editar_ficha.dart';
 
 /// Classe responsável pela página da Lista
@@ -108,12 +109,15 @@ class _ListaState extends State<ListaPage> {
     });
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          TextButton(onPressed: carregarFichas, child: const Text('Carregar')),
+          TextButton(
+            onPressed: carregarFichas, 
+            style: TextButton.styleFrom(fixedSize: const Size.fromHeight(75)), 
+            child: const Text('Carregar'),),
           Expanded(
             child: ListView.builder(
               itemCount: fichas.length, 
@@ -126,14 +130,30 @@ class _ListaState extends State<ListaPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Lista de Fichas'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute<void>(builder: 
-          (BuildContext context) => const EditarFichaPage(),),);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          const SizedBox(
+          height: 70,
+          ),
+          FloatingActionButton.small(
+            onPressed: () {
+              Navigator.push(
+                context, MaterialPageRoute<void>(builder: 
+                (BuildContext context) => const EditarFichaPage(),),);
+            },
+            child: const Icon(Icons.add),
+          ),
+        FloatingActionButton.small(           
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute<void>(builder: 
+            (BuildContext context) => const DadoPage(),),);
+          },
+          child: const Icon(Icons.casino),
         ),
-  );
+    ],
+  ),
+);
   
 }
   
