@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:tavernadoscombos/factories/dado_page_factory.dart';
-import 'package:tavernadoscombos/factories/editar_ficha_page_factory.dart';
-import 'package:tavernadoscombos/factories/taverneiro_page_factory.dart';
 import 'package:tavernadoscombos/ficha.dart';
 import 'package:tavernadoscombos/paginas/dado.dart';
 import 'package:tavernadoscombos/paginas/editar_ficha.dart';
@@ -53,8 +50,9 @@ class _ListaState extends State<ListaPage> {
           await Navigator.push(
             context, 
              MaterialPageRoute<void>(
-              builder: (BuildContext context) => 
-              EditarFichaPageFactory().createPage(),),);
+              builder: (BuildContext context) => EditarFichaPage(
+                ficha: ficha,
+                ),),);
         carregarFichas();
         },
       );
@@ -143,23 +141,21 @@ class _ListaState extends State<ListaPage> {
             onPressed: () {
               Navigator.push(
                 context, MaterialPageRoute<void>(builder: 
-                (BuildContext context) => 
-                EditarFichaPageFactory().createPage(),),);
+                (BuildContext context) => const EditarFichaPage(),),);
             },
             child: const Icon(Icons.add),
           ),
           FloatingActionButton.small(           
             onPressed: () {
               Navigator.push(context, MaterialPageRoute<void>(builder: 
-              (BuildContext context) => DadoPageFactory().createPage(),),);
+              (BuildContext context) => const DadoPage(),),);
             },
             child: const Icon(Icons.casino),
           ),
           FloatingActionButton.small(           
             onPressed: () {
               Navigator.push(context, MaterialPageRoute<void>(builder: 
-              (BuildContext context) => 
-              TaverneiroPageFactory().createPage(),),);
+              (BuildContext context) => const TaverneiroPage(),),);
             },
             child: const Icon(Icons.question_mark),
           ),

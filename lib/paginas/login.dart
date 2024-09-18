@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tavernadoscombos/factories/lista_page_factory.dart';
 import 'package:tavernadoscombos/paginas/criar_conta.dart';
 import 'package:tavernadoscombos/paginas/lista.dart';
 
@@ -61,7 +60,7 @@ class LoginPage extends StatelessWidget {
                     );
                     Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: 
-                    (BuildContext context) => ListaPageFactory().createPage(),
+                    (BuildContext context) => ListaPage(),
                     ),
                   );
                   },
@@ -74,7 +73,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: 
-                      (BuildContext context) => ListaPageFactory().createPage(),
+                      (BuildContext context) => CriarContaPage(),
                       ),
                     );
                   }, 
