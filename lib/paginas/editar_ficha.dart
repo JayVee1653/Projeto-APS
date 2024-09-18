@@ -1,14 +1,107 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/ficha.dart';
 
+/// Interface Command representando uma ação executável
+abstract class Command {
+  void execute();
+}
+
+/// Command para adicionar um poder
+class AdicionarPoderCommand implements Command {
+  AdicionarPoderCommand(this.poderesGerais, this.controller);
+  final List<String> poderesGerais;
+  final TextEditingController controller;
+
+  @override
+  void execute() {
+    poderesGerais.add(controller.text);
+    controller.clear();
+  }
+}
+
+/// Command para remover um poder
+class RemoverPoderCommand implements Command {
+  RemoverPoderCommand(this.poderesGerais, this.index);
+  final List<String> poderesGerais;
+  final int index;
+
+  @override
+  void execute() {
+    poderesGerais.removeAt(index);
+  }
+}
+
+/// Command para adicionar uma magia
+class AdicionarMagiaCommand implements Command {
+  AdicionarMagiaCommand(this.magias, this.controller);
+  final List<String> magias;
+  final TextEditingController controller;
+
+  @override
+  void execute() {
+    magias.add(controller.text);
+    controller.clear();
+  }
+}
+
+/// Command para remover uma magia
+class RemoverMagiaCommand implements Command {
+  RemoverMagiaCommand(this.magias, this.index);
+  final List<String> magias;
+  final int index;
+
+  @override
+  void execute() {
+    magias.removeAt(index);
+  }
+}
+
+/// Command para salvar a ficha no Firebase
+class SalvarFichaCommand implements Command {
+  SalvarFichaCommand(this.ficha, this.formKey, this.isEditing);
+  final Ficha ficha;
+  final GlobalKey<FormState> formKey;
+  final bool isEditing;
+
+  /// Função para adicionar ficha no Firebase
+  Future<void> _addFicha(Ficha ficha) async {
+    await FirebaseFirestore.instance.collection('fichas').add(ficha.toMap());
+  }
+
+  /// Função para atualizar ficha no Firebase
+  Future<void> _updateFicha(Ficha ficha, String uID) async {
+    await FirebaseFirestore.instance.collection('fichas').doc(uID).update(ficha.toMap());
+  }
+
+  @override
+  Future<void> execute() async {
+    if (formKey.currentState!.validate()) {
+      if (FirebaseAuth.instance.currentUser?.uid != null) {
+        final Ficha fichaAtualizada = Ficha(
+          uID: ficha.uID, // Certifique-se de que o uID está presente
+          authorUID: FirebaseAuth.instance.currentUser!.uid,
+          classe: ficha.classe,
+          nome: ficha.nome,
+          origem: ficha.origem,
+          poderesGerais: ficha.poderesGerais,
+          magias: ficha.magias,
+        );
+
+        if (isEditing && ficha.uID.isNotEmpty) {
+          await _updateFicha(fichaAtualizada, ficha.uID); // Atualiza ficha existente
+        } else {
+          await _addFicha(fichaAtualizada); // Adiciona nova ficha
+        }
+      }
+    }
+  }
+}
+
 /// Classe responsável por toda a página de Editar Ficha
 class EditarFichaPage extends StatefulWidget {
-  /// Constructo responsável por toda a página de Editar Ficha
   const EditarFichaPage({super.key, this.ficha});
-  /// Chamada responsável por adquirir todo as informações da ficha
   final Ficha? ficha;
 
   @override
@@ -20,11 +113,12 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _classeController = TextEditingController();
   final TextEditingController _origemController = TextEditingController();
-  final TextEditingController 
-  _poderesgeraisController = TextEditingController();
+  final TextEditingController _poderesgeraisController = TextEditingController();
   final TextEditingController _magiasController = TextEditingController();
+
   List<String> _poderesgerais = <String>[];
   List<String> _magias = <String>[];
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -35,9 +129,9 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
       _origemController.text = widget.ficha!.origem;
       _poderesgerais = widget.ficha!.poderesGerais;
       _magias = widget.ficha!.magias;
+      isEditing = true; // Define como edição
     }
   }
-
 
   @override
   void dispose() {
@@ -46,29 +140,9 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
     super.dispose();
   }
 
-  void _adicionarPoderes() {
+  void _executarCommand(Command command) {
     setState(() {
-      _poderesgerais.add(_poderesgeraisController.text);
-      _poderesgeraisController.clear();
-    });
-  }
-
-  void _adicionarMagias() {
-    setState(() {
-      _magias.add(_magiasController.text);
-      _magiasController.clear();
-    });
-  }
-
-  void _removerPoderes(int index) {
-    setState(() {
-      _poderesgerais.removeAt(index);
-    });
-  }
-
-  void _removerMagias(int index) {
-    setState(() {
-      _magias.removeAt(index);
+      command.execute();
     });
   }
 
@@ -124,18 +198,17 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
                     title: Text(_poderesgerais[index]),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: () => _removerPoderes(index),
+                      onPressed: () => _executarCommand(RemoverPoderCommand(_poderesgerais, index)),
                     ),
                   );
                 },
               ),
               TextFormField(
                 controller: _poderesgeraisController,
-                decoration: const InputDecoration
-                (labelText: 'Adicionar Poder Geral'),
+                decoration: const InputDecoration(labelText: 'Adicionar Poder Geral'),
               ),
               TextButton(
-                onPressed: _adicionarPoderes,
+                onPressed: () => _executarCommand(AdicionarPoderCommand(_poderesgerais, _poderesgeraisController)),
                 child: const Text('Adicionar'),
               ),
               const Text('Magia', style: TextStyle(fontSize: 16.0)),
@@ -147,7 +220,7 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
                     title: Text(_magias[index]),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: () => _removerMagias(index),
+                      onPressed: () => _executarCommand(RemoverMagiaCommand(_magias, index)),
                     ),
                   );
                 },
@@ -157,37 +230,23 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
                 decoration: const InputDecoration(labelText: 'Adicionar Magia'),
               ),
               TextButton(
-                onPressed: _adicionarMagias,
+                onPressed: () => _executarCommand(AdicionarMagiaCommand(_magias, _magiasController)),
                 child: const Text('Adicionar'),
               ),
               TextButton(
                 child: const Text('Salvar'),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    if (FirebaseAuth.instance.currentUser?.uid != null) {
-                      final Ficha ficha = Ficha(
-                        authorUID: FirebaseAuth.instance.currentUser!.uid,
-                        classe: _classeController.text,
-                        nome: _nomeController.text,
-                        origem: _origemController.text,
-                        poderesGerais: _poderesgerais,
-                        magias: _magias,
-                      );
-                      if(widget.ficha != null && widget.ficha!.uID.isNotEmpty) {
-                       await FirebaseFirestore.instanceFor(
-                              app: Firebase.apps.first,)
-                          .collection('fichas')
-                          .doc(widget.ficha!.uID)
-                          .update(ficha.toMap()); 
-                      } else {
-                        await FirebaseFirestore.instanceFor(
-                              app: Firebase.apps.first,)
-                          .collection('fichas')
-                          .add(ficha.toMap());
-                      }
-                      Navigator.pop(context);
-                    }
-                  }
+                onPressed: () {
+                  final Ficha ficha = Ficha(
+                    uID: widget.ficha?.uID ?? '', // Utiliza o uID da ficha se estiver em edição
+                    authorUID: FirebaseAuth.instance.currentUser?.uid ?? '',
+                    classe: _classeController.text,
+                    nome: _nomeController.text,
+                    origem: _origemController.text,
+                    poderesGerais: _poderesgerais,
+                    magias: _magias,
+                  );
+                  _executarCommand(SalvarFichaCommand(ficha, _formKey, isEditing));
+                  Navigator.pop(context);
                 },
               ),
             ],

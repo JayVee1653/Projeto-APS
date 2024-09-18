@@ -31,7 +31,7 @@ class FirebaseService {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      _isInitialized = true;
+      _isInitialized = true; // Marca como inicializado
     }
   }
 }
