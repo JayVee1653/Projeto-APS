@@ -45,6 +45,7 @@ class CriarContaPage extends StatelessWidget {
                   controller: criarSenhaController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    hintText: 'Sua senha deve ter números e caracteres',
                     label: Text('Insira uma senha'), 
                   ),
                 ),

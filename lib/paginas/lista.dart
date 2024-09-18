@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tavernadoscombos/ficha.dart';
 import 'package:tavernadoscombos/paginas/dado.dart';
 import 'package:tavernadoscombos/paginas/editar_ficha.dart';
+import 'package:tavernadoscombos/paginas/taverneiro.dart';
 
 /// Classe responsável pela página da Lista
 class ListaPage extends StatefulWidget {
@@ -144,13 +145,20 @@ class _ListaState extends State<ListaPage> {
             },
             child: const Icon(Icons.add),
           ),
-        FloatingActionButton.small(           
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute<void>(builder: 
-            (BuildContext context) => const DadoPage(),),);
-          },
-          child: const Icon(Icons.casino),
-        ),
+          FloatingActionButton.small(           
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(builder: 
+              (BuildContext context) => const DadoPage(),),);
+            },
+            child: const Icon(Icons.casino),
+          ),
+          FloatingActionButton.small(           
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(builder: 
+              (BuildContext context) => const TaverneiroPage(),),);
+            },
+            child: const Icon(Icons.question_mark),
+          ),
     ],
   ),
 );
