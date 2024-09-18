@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tavernadoscombos/firebase_options.dart';
 import 'package:tavernadoscombos/paginas/login.dart';
+import 'package:tavernadoscombos/services/firebase_service.dart';
 void main() {
  init();
  runApp(const MyApp());
@@ -10,12 +11,10 @@ void main() {
 
 /// Função responsável por iniciar o Firebase
 Future<void> init() async {
- await dotenv.load();
- WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(
- options: DefaultFirebaseOptions.currentPlatform,
- );
-}
+    await dotenv.load();
+    WidgetsFlutterBinding.ensureInitialized();
+    await FirebaseService.instance.initialize();
+  }
 
 /// Classe responsável por conter todo o app
 class MyApp extends StatelessWidget {

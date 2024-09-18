@@ -1,3 +1,6 @@
+analyzer:
+  errors:
+    unused_import: ignore
 include: package:lint/analysis_options.yaml
 
 # Not happy with the default? Customize the rules depending on your needs. 

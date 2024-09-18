@@ -1,3 +1,4 @@
+
 /// Classe responsável por manter todas as informações da ficha
 class Ficha {
   /// Chamadas das informações das fichas
