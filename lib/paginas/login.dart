@@ -74,7 +74,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: 
-                      (BuildContext context) => CriarContaPage(),
+                      (BuildContext context) => ListaPageFactory().createPage(),
                       ),
                     );
                   }, 

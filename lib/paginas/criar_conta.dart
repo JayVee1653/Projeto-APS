@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tavernadoscombos/factories/lista_page_factory.dart';
 import 'package:tavernadoscombos/paginas/lista.dart';
 
 /// Classe que engloba toda a página de Criar Conta
@@ -63,7 +64,7 @@ class CriarContaPage extends StatelessWidget {
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: 
-                      (BuildContext context) => ListaPage(),
+                      (BuildContext context) => ListaPageFactory().createPage(),
                       ),
                     );
                   },
